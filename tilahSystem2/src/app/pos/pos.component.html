@@ -1,0 +1,146 @@
+<div class="container-fluid p-0 m-0">
+  <mdb-navbar SideClass="navbar navbar-1 navbar-light bg-red-style text-light lighten-2" [containerInside]="false">
+    <mdb-navbar-brand>
+      <a class="navbar-brand link-unstyled text-light brand-style mb-1" routerLink="/">
+        <h5 class="mb-0 pb-0">TILAH SEED CENTER</h5><br>
+        <small>Maligaya Branch</small>
+      </a>
+    </mdb-navbar-brand>
+    <links>
+      <ul class="navbar-nav mr-auto">
+          <!-- <li class="nav-item active">
+              <a routerLink="/dashboard" class="nav-link link-unstyled text-light" [hidden]="role">Dashboard<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+              <a routerLink="/seed" class="nav-link link-unstyled text-light">Seed<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+              <a routerLink="/user" class="nav-link link-unstyled text-light" [hidden]="role">User</a>
+          </li> -->
+          <li class="nav-item">
+              <a (click)="logoutModal(logout)" class="nav-link link-unstyled text-light">Logout</a>
+          </li> 
+      </ul>
+  </links>
+</mdb-navbar>
+  <div class="row mx-0 p-4">
+    <div class="col-lg-4 col-sm-12">
+        <h3 class="">Select Item Here</h3>
+        <div class="row">
+          <div class="table-responsive overflow-y pos-table-style">
+            <table class="table">
+              <tr *ngFor="let item of items">
+                <td class="mx-0 my-1 p-0">
+                  <button (click)="onClick(item._id)" color="#" class="text-left btn-sm" block="true" mdbBtn type="button" rounded="true" mdbWavesEffect><h5>{{item.name}}</h5></button>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-12 px-0 mt-4 pt-3">
+            <a routerLink="/seed"><button class="btn-sm" mdbBtn block="true" type="button" rounded="true" mdbWavesEffect><h4>Manage Seeds</h4></button></a>
+          </div>
+        </div>          
+    </div>
+    <div class="col-lg-8 col-sm-12">
+      <h3 class="">Order Summary</h3>
+      <div class="table-responsive overflow-y pos-table-style">
+          <table mdbTable class="table">
+            <tr class="thead-light sticky-top">
+              <th *ngFor="let head of headElements" scope="col" class="">{{head}}</th>
+            </tr>
+            <tr mdbTableCol *ngFor="let order of orders">
+              <th scope="row">{{order.name}}</th>
+              <td>{{order.price}}</td>
+              <td>{{order.quantity}}</td>
+              <td>{{order.amount}}</td>
+            </tr>
+        </table>
+      </div>
+      <div class="row px-1">
+        <div class="col-2"><h5 class="font-weight-bold">Total:</h5></div>
+        <div class="col-7"></div>
+        <div class="col-3"><h5 class="font-weight-bold">{{total}}</h5></div>
+      </div>
+      <div class="row mt-1 pt-1">
+        <div class="col-lg-6 col-sm-12">
+          <button (click)="clickClear()" class="btn-sm" mdbBtn block="true" type="button" mdbWavesEffect><h4>Clear order</h4></button>
+        </div>
+        <div class="col-lg-6 col-sm-12" *ngIf="orders.length != 0; else elseBlock">
+            <button class="btn-sm" mdbBtn block="true" type="button" (click)="basicModal.show()" mdbWavesEffect><h4>PAY</h4></button>
+        </div>
+        <ng-template #elseBlock>
+          <div class="col-lg-6 col-sm-12">
+            <button class="btn-sm" mdbBtn block="true" type="button" mdbWavesEffect disabled><h4>PAY</h4></button>
+          </div>
+        </ng-template>
+      </div>
+  </div>
+  <footer class="footer fixed-bottom"></footer>
+</div>
+
+<div mdbModal #basicModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-light">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Order Summary</h4>
+      </div>
+      <div class="modal-body overflow-y">
+        <div class="row" *ngFor="let order of orders">
+          <div class="col-3">{{order.name}}</div>
+          <div class="col-2">x {{order.quantity}}</div>
+          <div class="col-4">@ {{order.price}}</div>
+          <div class="col-3">{{order.amount}}</div>
+        </div>
+        <div class="row">
+          <div class="col-8"><h3>Total: </h3></div>
+          <div class="col-4"><h3>{{total}}</h3></div>
+        </div>
+        <div class="row">
+          <div class="col-8"><h3>Enter Payment: </h3></div>
+          <div class="col-4">
+            <input class="form-control" type="text" [(ngModel)]="payment" [(ngModel)]="change" required>
+          </div>
+        </div>
+          <div class="row">
+            <div class="col-8"><h3>Change: </h3></div>
+            <div class="col-4"><h3>{{change - total}}</h3></div>
+          </div>
+      </div>
+      <div class="modal-footer" *ngIf="(change - total) >= 0; else eb">
+        <button type="button" mdbBtn color="primary" class="relative waves-light form-control btn-sm" (click)="payModal(pay); basicModal.hide()" mdbWavesEffect>PAY</button>
+      </div>
+      <ng-template #eb>
+        <button type="button" mdbBtn color="primary" class="mx-0 waves-light form-control btn-sm" (click)="clickPay()" mdbWavesEffect disabled>PAY</button>
+      </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #logout let-modal>
+  <div class="modal-header bg-danger text-light">
+      <h5 class="modal-title">Are you sure you want to Logout?</h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body d-flex justify-content-center">
+      <button type="button" (click)="clickLogout(modal.dismiss())" class="btn btn-danger hvr-buzz">YES</button>
+      <button type="button" (click)="modal.dismiss()" class="btn btn-light">Cancel</button>
+  </div>
+</ng-template>
+
+<ng-template #pay let-modal>
+    <div class="modal-header bg-success text-light d-flex justify-content-center">
+        <h5 class="modal-title">PAID!</h5>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+  <div class="modal-body d-flex justify-content-center">
+    <button type="button" (click)="clickPay(modal.dismiss())" class="btn btn-sm btn-success hvr-buzz">OK</button>
+  </div>
+</ng-template>
