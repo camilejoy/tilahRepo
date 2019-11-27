@@ -22,13 +22,11 @@ const routes: Routes = [
   },
   {
     path: 'pointOfSale',
-    component: PosComponent,
-    canActivate: [AuthGuard]
+    component: PosComponent
   },
   {
     path: 'seed',
-    component: SeedComponent,
-    canActivate: [AuthGuard]
+    component: SeedComponent
   },
   {
     path: 'user',

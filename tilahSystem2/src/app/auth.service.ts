@@ -15,6 +15,7 @@ export class AuthService {
               private userService: UserService) { }
 
   private url:String = "https://tilah-system.herokuapp.com";
+
   //private headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   // addUser(user: User):Observable<any>{
@@ -33,9 +34,20 @@ export class AuthService {
     );
   }
 
+  userRole;
+
   loggedIn(){
     this.userService.currentUser = localStorage.getItem('userId');
-    return !!localStorage.getItem('token');
+    this.userService.getUser(this.userService.currentUser).subscribe((data) => {
+      this.userRole = data[0].role;
+    })
+    if(this.userRole == "admin" && !!localStorage.getItem('token')){
+      return true;
+    }
+    else{
+      return false;
+    }
+    // return !!localStorage.getItem('token');
   }
 
   logOut(){
